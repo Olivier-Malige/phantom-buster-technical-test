@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["tailwindcss"],
+  "cSpell.words": [
+    "daisyui",
+    "tailwindcss"
+  ],
   "search.exclude": {
     "package-lock.json": true
   },
