@@ -2,7 +2,7 @@ import { PhantomLogo } from '../shared/PhantomLogo';
 
 const AppBar = () => {
   return (
-    <header className=" sticky top-0 bg-base-100/60 backdrop-blur">
+    <header className="sticky top-0 bg-base-100/70 backdrop-blur">
       <nav className="container navbar mx-auto">
         <div className="navbar-start">
           <a href="#">
