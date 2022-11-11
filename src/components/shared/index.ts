@@ -1,0 +1,1 @@
+export { PhantomLogo } from './PhantomLogo';

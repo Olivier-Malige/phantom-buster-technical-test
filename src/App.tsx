@@ -1,11 +1,13 @@
 import './styles/globals.css';
 
+import { MainLayout } from './layouts';
+import { DashboardPage } from './pages';
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-      <button className="btn">Daisy UI button</button>
-    </>
+    <MainLayout>
+      <DashboardPage />
+    </MainLayout>
   );
 }
 
