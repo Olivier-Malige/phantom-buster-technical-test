@@ -1,8 +1,8 @@
-import { PhantomLogo } from '../shared/PhantomLogo';
+import { PhantomLogo } from '../../icons/PhantomLogo';
 
 const AppBar = () => {
   return (
-    <header className="sticky top-0 bg-base-100/70 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-base-100/70 backdrop-blur">
       <nav className="container navbar mx-auto">
         <div className="navbar-start">
           <a href="#">

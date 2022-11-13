@@ -1,4 +1,9 @@
+import { PhantomsList } from '../components/PhantomsList';
+import phantoms from '../data/phantoms.json';
+
 const DashboardPage = () => {
+  console.log(phantoms);
+
   return (
     <section className="my-10">
       <div className="flex justify-center lg:justify-start">
@@ -7,7 +12,9 @@ const DashboardPage = () => {
 
       <div className="mt-9 flex flex-col lg:flex-row lg:gap-10">
         <div className="min-w-[250px]">categories</div>
-        <div className="flex-1">phantoms</div>
+        <div className="flex-1">
+          <PhantomsList />
+        </div>
       </div>
     </section>
   );

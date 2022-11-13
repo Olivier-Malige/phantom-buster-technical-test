@@ -1,4 +1,4 @@
-import { PhantomLogo } from '../shared/PhantomLogo';
+import { PhantomLogo } from '../../icons/PhantomLogo';
 
 const Footer = () => {
   return (
