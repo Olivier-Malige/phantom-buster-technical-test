@@ -1,9 +1,6 @@
 import { PhantomsList } from '../components/PhantomsList';
-import phantoms from '../data/phantoms.json';
 
 const DashboardPage = () => {
-  console.log(phantoms);
-
   return (
     <section className="my-10">
       <div className="flex justify-center lg:justify-start">

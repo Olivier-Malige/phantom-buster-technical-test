@@ -2,7 +2,8 @@
   "cSpell.words": [
     "appbar",
     "daisyui",
-    "tailwindcss"
+    "tailwindcss",
+    "uuidv"
   ],
   "search.exclude": {
     "package-lock.json": true
