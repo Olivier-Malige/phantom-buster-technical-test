@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { createContext, useMemo, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import type { IPhantoms } from '../data/phantoms';
 import phantomsJson from '../data/phantoms.json';
-import type { IPhantoms } from '../phantoms';
 
 interface IPhantomAction {
   type: ACTIONS;

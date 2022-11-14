@@ -3,6 +3,7 @@
     "appbar",
     "daisyui",
     "tailwindcss",
+    "testid",
     "uuidv"
   ],
   "search.exclude": {

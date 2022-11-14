@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MoreDots, Timer } from '../../icons';
 import { ConfirmModal } from '../ConfirmModal';
 
-interface PhantomCardProps {
+export interface PhantomCardProps {
   id: string;
   name: string;
   launchType: 'manually' | 'repeatedly';
@@ -25,19 +25,27 @@ const PhantomCard = ({
   onRename,
 }: PhantomCardProps) => {
   const [inputNameValue, setInputNameValue] = useState(name);
+
+  const [openRenameModal, setOpenRenameModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   const renameModalId = `rename-modal-${id}`;
   const deleteModalId = `delete-modal-${id}`;
 
   const handleDelete = () => {
     onDelete(id);
+    setOpenDeleteModal(false);
   };
 
   const handleRename = () => {
     onRename(id, inputNameValue.trim());
+    setOpenRenameModal(false);
   };
 
   const handleCancel = () => {
     setInputNameValue(name.trim());
+    setOpenDeleteModal(false);
+    setOpenRenameModal(false);
   };
 
   const handleDuplicate = () => {
@@ -47,7 +55,11 @@ const PhantomCard = ({
 
   const dropDownMenu = (
     <div className="dropdown-bottom dropdown-end dropdown">
-      <label tabIndex={0} className="btn-ghost btn-sm btn-circle btn ">
+      <label
+        data-testid="dropDownMenu"
+        tabIndex={0}
+        className="btn-ghost btn-sm btn-circle btn "
+      >
         <MoreDots className="w-4" />
       </label>
       <ul
@@ -55,14 +67,25 @@ const PhantomCard = ({
         className="dropdown-content menu rounded-box w-36 bg-base-100 p-2 text-sm shadow"
       >
         <li>
-          <label htmlFor={renameModalId}>Rename</label>
+          <button
+            data-testid="dropDownMenu-rename"
+            onClick={() => setOpenRenameModal(true)}
+          >
+            Rename
+          </button>
         </li>
         <li>
-          <label onClick={handleDuplicate}>Duplicate</label>
+          <label data-testid="dropDownMenu-duplicate" onClick={handleDuplicate}>
+            Duplicate
+          </label>
         </li>
         <div className="border-t-2" />
         <li>
-          <label htmlFor={deleteModalId} className="text-error">
+          <label
+            data-testid="dropDownMenu-delete"
+            onClick={() => setOpenDeleteModal(true)}
+            className="text-error"
+          >
             Delete
           </label>
         </li>
@@ -72,6 +95,7 @@ const PhantomCard = ({
 
   const renameModal = (
     <ConfirmModal
+      isOpen={openRenameModal}
       modalId={renameModalId}
       onCancel={handleCancel}
       onConfirm={handleRename}
@@ -79,6 +103,8 @@ const PhantomCard = ({
       disableSubmit={inputNameValue.trim().length < 2}
     >
       <input
+        data-testid="input-rename"
+        name="phantomName"
         value={inputNameValue}
         onChange={(event) => setInputNameValue(event.target.value)}
         type="text"
@@ -90,6 +116,7 @@ const PhantomCard = ({
 
   const deleteModal = (
     <ConfirmModal
+      isOpen={openDeleteModal}
       modalId={deleteModalId}
       onCancel={handleCancel}
       onConfirm={handleDelete}

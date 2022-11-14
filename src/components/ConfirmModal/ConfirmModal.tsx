@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 interface ConfirmModalProps {
   modalId: string;
+  isOpen: boolean;
   title?: string;
   children?: ReactNode;
   onConfirm: () => void;
@@ -10,6 +11,7 @@ interface ConfirmModalProps {
 }
 
 const ConfirmModal = ({
+  isOpen,
   modalId,
   title,
   children,
@@ -17,34 +19,33 @@ const ConfirmModal = ({
   onCancel,
   disableSubmit = false,
 }: ConfirmModalProps) => {
+  if (!isOpen) return null;
+
   return (
-    <>
-      <input type="checkbox" id={modalId} className="modal-toggle" />
-      <div className="modal">
-        <div className="modal-box">
-          <h3 className="text-lg font-bold">{title || 'Are you sure?'}</h3>
-          <div className="py-4">{children}</div>
-          <div className="modal-action">
-            <label
-              htmlFor={modalId}
-              className="btn-ghost btn"
-              onClick={onCancel}
+    <div className="modal modal-open">
+      <div data-testid={modalId} className="modal-box">
+        <h3 className="text-lg font-bold">{title || 'Are you sure?'}</h3>
+        <div className="py-4">{children}</div>
+        <div className="modal-action">
+          <button
+            data-testid={`${modalId}-cancel`}
+            className="btn-ghost btn"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          {!disableSubmit && (
+            <button
+              data-testid={`${modalId}-ok`}
+              className="btn-warning btn"
+              onClick={onConfirm}
             >
-              Cancel
-            </label>
-            {!disableSubmit && (
-              <label
-                htmlFor={modalId}
-                className="btn-warning btn"
-                onClick={onConfirm}
-              >
-                OK
-              </label>
-            )}
-          </div>
+              OK
+            </button>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
