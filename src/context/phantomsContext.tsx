@@ -15,9 +15,9 @@ interface IPhantomAction {
 
 interface IPhantomsContext {
   phantoms: IPhantoms;
-  delete: (id: string) => void;
-  rename: (id: string, value: string) => void;
-  duplicate: (id: string) => void;
+  dispatchDelete: (id: string) => void;
+  dispatchRename: (id: string, value: string) => void;
+  dispatchDuplicate: (id: string) => void;
 }
 
 const initialState = phantomsJson as IPhantoms;
@@ -73,13 +73,13 @@ export const PhantomsProvider = ({ children }: { children: ReactNode }) => {
     return {
       phantoms: state,
 
-      delete: (id: string) =>
+      dispatchDelete: (id: string) =>
         dispatch({ type: ACTIONS.DELETE, payload: { id } }),
 
-      rename: (id: string, value: string) =>
+      dispatchRename: (id: string, value: string) =>
         dispatch({ type: ACTIONS.RENAME, payload: { id, value } }),
 
-      duplicate: (id: string) =>
+      dispatchDuplicate: (id: string) =>
         dispatch({ type: ACTIONS.DUPLICATE, payload: { id } }),
     };
   }, [state, dispatch]);

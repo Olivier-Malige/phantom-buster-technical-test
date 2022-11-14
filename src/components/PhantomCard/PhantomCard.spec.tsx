@@ -48,8 +48,8 @@ describe('PhantomCard', () => {
   });
 
   test('Should call onRename', async () => {
-    const onRenameMock = jest.fn((name, value) => ({
-      name,
+    const onRenameMock = jest.fn((id, value) => ({
+      id,
       value,
     }));
     render(<PhantomCard {...defaultProps} onRename={onRenameMock} />);
@@ -76,7 +76,7 @@ describe('PhantomCard', () => {
     await waitFor(() => expect(onRenameMock).toHaveBeenCalled());
 
     expect(onRenameMock.mock.results[0]?.value).toStrictEqual({
-      name: '123',
+      id: '123',
       value: 'toto',
     });
   });

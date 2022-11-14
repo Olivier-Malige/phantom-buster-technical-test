@@ -20,9 +20,9 @@ const PhantomsList = () => {
           nextLaunchIn={phantom.nextLaunchIn}
           repeatedLaunchTimes={phantom.repeatedLaunchTimes?.simplePreset}
           launchType={phantom.launchType}
-          onDelete={phantomsContext.delete}
-          onDuplicate={phantomsContext.duplicate}
-          onRename={phantomsContext.rename}
+          onDelete={phantomsContext.dispatchDelete}
+          onDuplicate={phantomsContext.dispatchDuplicate}
+          onRename={phantomsContext.dispatchRename}
         />
       ))}
     </div>
