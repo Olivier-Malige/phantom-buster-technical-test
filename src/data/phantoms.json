@@ -68,7 +68,7 @@
         "id": "891500502819788",
         "name": "LinkedIn Event Inviter",
         "script": "LinkedIn Event Inviter.js",
-        "manifest": {
+        "manifest": {j
             "tags": {
                 "categories": [
                     "linkedin"

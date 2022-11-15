@@ -1,17 +1,9 @@
 import type { ReactNode } from 'react';
-import { createContext, useMemo, useReducer } from 'react';
+import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { IPhantoms } from '../data/phantoms';
-import phantomsJson from '../data/phantoms.json';
-
-interface IPhantomAction {
-  type: ACTIONS;
-  payload: {
-    id: string;
-    value?: string;
-  };
-}
+import { useFetchData } from '../hooks/useFetchData';
 
 interface IPhantomsContext {
   phantoms: IPhantoms;
@@ -20,58 +12,125 @@ interface IPhantomsContext {
   dispatchDuplicate: (id: string) => void;
 }
 
-const initialState = phantomsJson as IPhantoms;
-
-export const PhantomsContext = createContext<IPhantomsContext | null>(null);
-
 enum ACTIONS {
   DELETE = 'DELETE',
   RENAME = 'RENAME',
   DUPLICATE = 'DUPLICATE',
+  FETCH_SUCCESS = 'FETCH_SUCCESS',
 }
 
-const reducer = (state: IPhantoms, action: IPhantomAction) => {
+type IPhantomsContextStates = {
+  phantoms: IPhantoms;
+  isLoading: boolean;
+};
+
+const initialStates: IPhantomsContextStates = {
+  phantoms: [],
+  isLoading: true,
+};
+
+type IRenameAction = {
+  type: ACTIONS.RENAME;
+  payload: {
+    id: string;
+    value: string;
+  };
+};
+
+type IDeleteAction = {
+  type: ACTIONS.DELETE;
+  payload: {
+    id: string;
+  };
+};
+
+type IDuplicateAction = {
+  type: ACTIONS.DUPLICATE;
+  payload: {
+    id: string;
+  };
+};
+
+type IFetchSuccessAction = {
+  type: ACTIONS.FETCH_SUCCESS;
+  payload: {
+    data: IPhantoms;
+  };
+};
+
+type IPhantomAction =
+  | IRenameAction
+  | IDeleteAction
+  | IDuplicateAction
+  | IFetchSuccessAction;
+
+const reducer = (state: IPhantomsContextStates, action: IPhantomAction) => {
   const { type, payload } = action;
   switch (type) {
     case ACTIONS.DELETE: {
-      return state.filter((phantom) => phantom.id !== payload.id);
+      return {
+        ...state,
+        phantoms: state.phantoms.filter((phantom) => phantom.id !== payload.id),
+      };
     }
 
     case ACTIONS.RENAME: {
       if (payload.value) {
-        return [
-          ...state.map((phantom) => {
+        return {
+          ...state,
+          phantoms: state.phantoms.map((phantom) => {
             if (phantom.id === payload.id && payload.value) {
               return { ...phantom, name: payload.value };
             }
             return phantom;
           }),
-        ];
+        };
       }
       return state;
     }
 
     case ACTIONS.DUPLICATE: {
-      const phantomToDuplicate = state.find(
+      const phantomToDuplicate = state.phantoms.find(
         (phantom) => phantom.id === payload.id
       );
 
       if (phantomToDuplicate) {
-        return [...state, { ...phantomToDuplicate, id: uuidv4() }];
+        return {
+          ...state,
+          phantoms: [
+            ...state.phantoms,
+            { ...phantomToDuplicate, id: uuidv4() },
+          ],
+        };
       }
       return state;
     }
+
+    case ACTIONS.FETCH_SUCCESS: {
+      return { ...state, isLoading: false, phantoms: payload.data };
+    }
+
     default:
       return state;
   }
 };
 
-export const PhantomsProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const PhantomsContext = createContext<IPhantomsContext | null>(null);
+
+const PhantomsProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, initialStates);
+
+  const { data } = useFetchData();
+
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: { data } });
+    }
+  }, [data]);
 
   const contextValue = useMemo(() => {
     return {
-      phantoms: state,
+      phantoms: state.phantoms,
 
       dispatchDelete: (id: string) =>
         dispatch({ type: ACTIONS.DELETE, payload: { id } }),
@@ -90,3 +149,5 @@ export const PhantomsProvider = ({ children }: { children: ReactNode }) => {
     </PhantomsContext.Provider>
   );
 };
+
+export { PhantomsContext, PhantomsProvider };
