@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
-import { PhantomsContext } from '../../context/phantomsContext';
+import { PhantomsContext } from '../../contexts/phantoms/phantoms.context';
 import { PhantomCard } from '../PhantomCard';
 
 const PhantomsList = () => {
@@ -10,9 +10,20 @@ const PhantomsList = () => {
     return null;
   }
 
+  const filteredPhantoms = useMemo(() => {
+    if (phantomsContext.filters.category !== '') {
+      return phantomsContext.phantoms.filter((phantom) =>
+        phantom.manifest.tags.categories.includes(
+          phantomsContext.filters.category
+        )
+      );
+    }
+    return phantomsContext.phantoms;
+  }, [phantomsContext.filters.category, phantomsContext.phantoms]);
+
   return (
     <div className="flex flex-col gap-4">
-      {phantomsContext.phantoms.map((phantom) => (
+      {filteredPhantoms.map((phantom) => (
         <PhantomCard
           key={phantom.id}
           id={phantom.id}

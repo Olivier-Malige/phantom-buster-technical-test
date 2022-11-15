@@ -2,79 +2,33 @@ import type { ReactNode } from 'react';
 import { createContext, useEffect, useMemo, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import type { IPhantoms } from '../data/phantoms';
-import { useFetchData } from '../hooks/useFetchData';
+import { useFetchData } from '../../hooks/useFetchData';
+import type {
+  IPhantomsActions,
+  IPhantomsContext,
+  IPhantomsContextStates,
+} from './phantoms.interfaces';
+import { extractCategoriesFromPhantoms } from './phantoms.utils';
 
-interface IPhantomsContext {
-  phantoms: IPhantoms;
-  dispatchDelete: (id: string) => void;
-  dispatchRename: (id: string, value: string) => void;
-  dispatchDuplicate: (id: string) => void;
-}
-
-enum ACTIONS {
+enum PhantomsActions {
   DELETE = 'DELETE',
   RENAME = 'RENAME',
   DUPLICATE = 'DUPLICATE',
   FETCH_SUCCESS = 'FETCH_SUCCESS',
+  SET_CATEGORY_FILTER = 'SET_CATEGORY_FILTER',
 }
 
-type IPhantomsContextStates = {
-  phantoms: IPhantoms;
-  isLoading: boolean;
-};
-
-const initialStates: IPhantomsContextStates = {
-  phantoms: [],
-  isLoading: true,
-};
-
-type IRenameAction = {
-  type: ACTIONS.RENAME;
-  payload: {
-    id: string;
-    value: string;
-  };
-};
-
-type IDeleteAction = {
-  type: ACTIONS.DELETE;
-  payload: {
-    id: string;
-  };
-};
-
-type IDuplicateAction = {
-  type: ACTIONS.DUPLICATE;
-  payload: {
-    id: string;
-  };
-};
-
-type IFetchSuccessAction = {
-  type: ACTIONS.FETCH_SUCCESS;
-  payload: {
-    data: IPhantoms;
-  };
-};
-
-type IPhantomAction =
-  | IRenameAction
-  | IDeleteAction
-  | IDuplicateAction
-  | IFetchSuccessAction;
-
-const reducer = (state: IPhantomsContextStates, action: IPhantomAction) => {
+const reducer = (state: IPhantomsContextStates, action: IPhantomsActions) => {
   const { type, payload } = action;
   switch (type) {
-    case ACTIONS.DELETE: {
+    case PhantomsActions.DELETE: {
       return {
         ...state,
         phantoms: state.phantoms.filter((phantom) => phantom.id !== payload.id),
       };
     }
 
-    case ACTIONS.RENAME: {
+    case PhantomsActions.RENAME: {
       if (payload.value) {
         return {
           ...state,
@@ -89,7 +43,7 @@ const reducer = (state: IPhantomsContextStates, action: IPhantomAction) => {
       return state;
     }
 
-    case ACTIONS.DUPLICATE: {
+    case PhantomsActions.DUPLICATE: {
       const phantomToDuplicate = state.phantoms.find(
         (phantom) => phantom.id === payload.id
       );
@@ -106,13 +60,36 @@ const reducer = (state: IPhantomsContextStates, action: IPhantomAction) => {
       return state;
     }
 
-    case ACTIONS.FETCH_SUCCESS: {
-      return { ...state, isLoading: false, phantoms: payload.data };
+    case PhantomsActions.FETCH_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        phantoms: payload.data,
+        categories: extractCategoriesFromPhantoms(payload.data),
+      };
+    }
+
+    case PhantomsActions.SET_CATEGORY_FILTER: {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          category: payload.category,
+        },
+      };
     }
 
     default:
       return state;
   }
+};
+const initialStates: IPhantomsContextStates = {
+  phantoms: [],
+  isLoading: true,
+  categories: [],
+  filters: {
+    category: '',
+  },
 };
 
 const PhantomsContext = createContext<IPhantomsContext | null>(null);
@@ -124,22 +101,31 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (data) {
-      dispatch({ type: ACTIONS.FETCH_SUCCESS, payload: { data } });
+      dispatch({ type: PhantomsActions.FETCH_SUCCESS, payload: { data } });
     }
   }, [data]);
 
   const contextValue = useMemo(() => {
     return {
       phantoms: state.phantoms,
+      categories: state.categories,
+      filters: state.filters,
+      isLoading: state.isLoading,
 
       dispatchDelete: (id: string) =>
-        dispatch({ type: ACTIONS.DELETE, payload: { id } }),
+        dispatch({ type: PhantomsActions.DELETE, payload: { id } }),
 
       dispatchRename: (id: string, value: string) =>
-        dispatch({ type: ACTIONS.RENAME, payload: { id, value } }),
+        dispatch({ type: PhantomsActions.RENAME, payload: { id, value } }),
 
       dispatchDuplicate: (id: string) =>
-        dispatch({ type: ACTIONS.DUPLICATE, payload: { id } }),
+        dispatch({ type: PhantomsActions.DUPLICATE, payload: { id } }),
+
+      dispatchSetCategoryFilter: (category: string) =>
+        dispatch({
+          type: PhantomsActions.SET_CATEGORY_FILTER,
+          payload: { category },
+        }),
     };
   }, [state, dispatch]);
 
@@ -150,4 +136,4 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export { PhantomsContext, PhantomsProvider };
+export { PhantomsActions, PhantomsContext, PhantomsProvider };

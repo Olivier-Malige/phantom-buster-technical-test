@@ -1,6 +1,6 @@
 import './styles/globals.css';
 
-import { PhantomsProvider } from './context/phantomsContext';
+import { PhantomsProvider } from './contexts/phantoms/phantoms.context';
 import { MainLayout } from './layouts';
 import { DashboardPage } from './pages';
 

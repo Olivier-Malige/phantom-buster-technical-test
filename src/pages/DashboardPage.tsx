@@ -1,3 +1,4 @@
+import { CategoriesFilter } from '../components/CategoriesFilter';
 import { PhantomsList } from '../components/PhantomsList';
 
 const DashboardPage = () => {
@@ -8,7 +9,9 @@ const DashboardPage = () => {
       </div>
 
       <div className="mt-9 flex flex-col lg:flex-row lg:gap-10">
-        <div className="min-w-[250px]">categories</div>
+        <div className="min-w-[250px]">
+          <CategoriesFilter />
+        </div>
         <div className="flex-1">
           <PhantomsList />
         </div>
