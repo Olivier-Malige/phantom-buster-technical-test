@@ -16,7 +16,7 @@ const FilterButton = ({ name, isActive, onClick }: FilterButtonProps) => (
       <input
         type="checkbox"
         defaultChecked
-        className="checkbox-primary checkbox checkbox-xs self-center opacity-50"
+        className="checkbox-primary checkbox checkbox-xs self-center "
       />
     )}
   </button>

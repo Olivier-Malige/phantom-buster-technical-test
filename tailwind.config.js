@@ -7,5 +7,22 @@ module.exports = {
   theme: {
     extend: {},
   },
+  daisyui: {
+    themes: [
+      'light',
+      'dark',
+      'cupcake',
+      'synthwave',
+      'retro',
+      'valentine',
+      'halloween',
+      'lofi',
+      'wireframe',
+      'luxury',
+      'dracula',
+      'night',
+      'winter',
+    ],
+  },
   plugins: [daisyui],
 };

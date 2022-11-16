@@ -2,9 +2,12 @@
   "cSpell.words": [
     "appbar",
     "daisyui",
+    "lofi",
+    "synthwave",
     "tailwindcss",
     "testid",
-    "uuidv"
+    "uuidv",
+    "wireframe"
   ],
   "search.exclude": {
     "package-lock.json": true
