@@ -2,6 +2,7 @@ import { useContext, useMemo } from 'react';
 
 import { PhantomsContext } from '../../contexts/phantoms/phantoms.context';
 import { PhantomCard } from '../PhantomCard';
+import { SpinnerLoader } from '../SpinnerLoader';
 
 const PhantomsList = () => {
   const phantomsContext = useContext(PhantomsContext);
@@ -20,6 +21,13 @@ const PhantomsList = () => {
     }
     return phantomsContext.phantoms;
   }, [phantomsContext.filters.category, phantomsContext.phantoms]);
+
+  if (phantomsContext.isLoading)
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <SpinnerLoader />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-4">
