@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { createContext, useMemo, useReducer } from 'react';
+import { createContext, useEffect, useMemo, useReducer } from 'react';
 
 import type {
   ISettingsActions,
@@ -10,6 +10,8 @@ import type {
 enum UserActions {
   CHANGE_THEME = 'CHANGE_THEME',
 }
+
+const LOCAL_STORAGE_KEY_THEME = 'theme';
 
 const reducer = (state: ISettingsContextStates, action: ISettingsActions) => {
   const { type, payload } = action;
@@ -26,13 +28,17 @@ const reducer = (state: ISettingsContextStates, action: ISettingsActions) => {
 };
 
 const initialStates = {
-  selectedTheme: 'light',
+  selectedTheme: localStorage.getItem(LOCAL_STORAGE_KEY_THEME) || 'light',
 };
 
 const SettingsContext = createContext<ISettingsContext | null>(null);
 
 const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialStates);
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_THEME, state.selectedTheme);
+  }, [state.selectedTheme]);
 
   const contextValue = useMemo(() => {
     return {
