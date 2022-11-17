@@ -64,7 +64,7 @@ const PhantomCard = ({
       </label>
       <ul
         tabIndex={0}
-        className="dropdown-content menu rounded-box w-36 bg-base-100 p-2 text-sm shadow"
+        className="dropdown-content menu rounded-box w-36 bg-base-100 p-2 text-sm font-semibold shadow"
       >
         <li>
           <button
@@ -79,12 +79,12 @@ const PhantomCard = ({
             Duplicate
           </label>
         </li>
-        <div className="border-t-2" />
+        <div className="divider divider-vertical h-0" />
         <li>
           <label
             data-testid="dropDownMenu-delete"
             onClick={() => setOpenDeleteModal(true)}
-            className="text-error"
+            className=" text-error "
           >
             Delete
           </label>
@@ -109,7 +109,7 @@ const PhantomCard = ({
         onChange={(event) => setInputNameValue(event.target.value)}
         type="text"
         placeholder="New name"
-        className="input-bordered input-ghost  input w-full"
+        className="input-bordered input-secondary input w-full font-semibold"
       />
     </ConfirmModal>
   );
@@ -131,11 +131,11 @@ const PhantomCard = ({
 
   return (
     <>
-      <div className="card bg-base-100">
+      <div className="card bg-base-100 shadow-sm">
         <div className="card-body">
           <div className="card-actions justify-end">{dropDownMenu}</div>
           <h2 className="card-title">{name}</h2>
-          <div className="flex text-sm text-gray-500">
+          <div className="flex text-sm opacity-60">
             {launchType === 'repeatedly' ? (
               <>
                 <span className="truncate">{repeatedLaunchTimes}</span>

@@ -37,7 +37,7 @@ const ConfirmModal = ({
           {!disableSubmit && (
             <button
               data-testid={`${modalId}-ok`}
-              className="btn-warning btn"
+              className="btn-primary btn"
               onClick={onConfirm}
             >
               OK

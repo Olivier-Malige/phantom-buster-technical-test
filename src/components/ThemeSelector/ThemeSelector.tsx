@@ -5,17 +5,12 @@ import { SettingsContext } from '../../contexts/settings/settings.context';
 const themes = [
   'light',
   'dark',
-  'cupcake',
   'synthwave',
   'retro',
   'valentine',
-  'halloween',
-  'lofi',
-  'wireframe',
   'luxury',
   'dracula',
   'night',
-  'winter',
 ];
 
 const ThemeSelector = () => {
@@ -32,10 +27,10 @@ const ThemeSelector = () => {
     <select
       value={selectedTheme}
       onChange={handleThemeChange}
-      className="select-primary select max-w-xs select-none"
+      className="select-bordered select-primary select select-sm max-w-xs select-none font-medium capitalize  "
     >
       {themes.map((theme) => (
-        <option key={theme} value={theme}>
+        <option className="font-medium " key={theme} value={theme}>
           {theme}
         </option>
       ))}
