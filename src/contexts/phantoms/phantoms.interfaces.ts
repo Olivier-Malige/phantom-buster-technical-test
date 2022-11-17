@@ -15,6 +15,7 @@ interface IPhantomsContext extends IPhantomsContextStates {
   dispatchRename: (id: string, value: string) => void;
   dispatchDuplicate: (id: string) => void;
   dispatchSetCategoryFilter: (category: string) => void;
+  reset: () => void;
 }
 
 type IRenameAction = {
@@ -53,12 +54,20 @@ type ISetCategoryFilterAction = {
   };
 };
 
+type ISetIsLoadingAction = {
+  type: PhantomsActions.SET_IS_LOADING;
+  payload: {
+    value: boolean;
+  };
+};
+
 type IPhantomsActions =
   | IRenameAction
   | IDeleteAction
   | IDuplicateAction
   | IFetchSuccessAction
-  | ISetCategoryFilterAction;
+  | ISetCategoryFilterAction
+  | ISetIsLoadingAction;
 
 export type {
   IDeleteAction,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MoreDots, Timer } from '../../icons';
+import { MoreDots, PhantomLogo, Timer } from '../../icons';
 import { ConfirmModal } from '../ConfirmModal';
 
 export interface PhantomCardProps {
@@ -131,9 +131,14 @@ const PhantomCard = ({
 
   return (
     <>
-      <div className="card bg-base-100 shadow-sm">
+      <div className="card bg-base-100 shadow-sm ">
         <div className="card-body">
-          <div className="card-actions justify-end">{dropDownMenu}</div>
+          <div className="flex justify-between">
+            <div className="w-16 animate-bounce opacity-20">
+              <PhantomLogo />
+            </div>
+            <div className="card-actions justify-end">{dropDownMenu}</div>
+          </div>
           <h2 className="card-title">{name}</h2>
           <div className="flex text-sm opacity-60">
             {launchType === 'repeatedly' ? (

@@ -27,7 +27,7 @@ const ThemeSelector = () => {
     <select
       value={selectedTheme}
       onChange={handleThemeChange}
-      className="select-bordered select-primary select select-sm max-w-xs select-none font-medium capitalize  "
+      className="select-bordered select-accent select select-sm max-w-xs select-none font-medium capitalize  "
     >
       {themes.map((theme) => (
         <option className="font-medium " key={theme} value={theme}>

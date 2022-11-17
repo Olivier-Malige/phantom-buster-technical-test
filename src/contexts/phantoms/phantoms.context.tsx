@@ -16,15 +16,23 @@ enum PhantomsActions {
   DUPLICATE = 'DUPLICATE',
   FETCH_SUCCESS = 'FETCH_SUCCESS',
   SET_CATEGORY_FILTER = 'SET_CATEGORY_FILTER',
+  SET_IS_LOADING = 'SET_IS_LOADING',
 }
+
+const LOCAL_STORAGE_KEY_PHANTOMS = 'phantoms';
 
 const reducer = (state: IPhantomsContextStates, action: IPhantomsActions) => {
   const { type, payload } = action;
   switch (type) {
     case PhantomsActions.DELETE: {
+      const newPhantomsList = state.phantoms.filter(
+        (phantom) => phantom.id !== payload.id
+      );
+
       return {
         ...state,
-        phantoms: state.phantoms.filter((phantom) => phantom.id !== payload.id),
+        phantoms: newPhantomsList,
+        categories: extractCategoriesFromPhantoms(newPhantomsList),
       };
     }
 
@@ -79,10 +87,18 @@ const reducer = (state: IPhantomsContextStates, action: IPhantomsActions) => {
       };
     }
 
+    case PhantomsActions.SET_IS_LOADING: {
+      return {
+        ...state,
+        isLoading: payload.value,
+      };
+    }
+
     default:
       return state;
   }
 };
+
 const initialStates: IPhantomsContextStates = {
   phantoms: [],
   isLoading: true,
@@ -96,14 +112,28 @@ const PhantomsContext = createContext<IPhantomsContext | null>(null);
 
 const PhantomsProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialStates);
-
-  const { data } = useFetchData();
+  const phantomsFromLocalStorage = localStorage.getItem(
+    LOCAL_STORAGE_KEY_PHANTOMS
+  );
+  const { data, reFetch } = useFetchData();
 
   useEffect(() => {
-    if (data) {
+    if (phantomsFromLocalStorage) {
+      dispatch({
+        type: PhantomsActions.FETCH_SUCCESS,
+        payload: { data: JSON.parse(phantomsFromLocalStorage) },
+      });
+    } else if (data) {
       dispatch({ type: PhantomsActions.FETCH_SUCCESS, payload: { data } });
     }
   }, [data]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_PHANTOMS,
+      JSON.stringify(state.phantoms)
+    );
+  }, [state.phantoms]);
 
   const contextValue = useMemo(() => {
     return {
@@ -126,6 +156,15 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
           type: PhantomsActions.SET_CATEGORY_FILTER,
           payload: { category },
         }),
+
+      reset: () => {
+        dispatch({
+          type: PhantomsActions.SET_IS_LOADING,
+          payload: { value: true },
+        });
+        localStorage.removeItem('phantoms');
+        reFetch();
+      },
     };
   }, [state, dispatch]);
 
