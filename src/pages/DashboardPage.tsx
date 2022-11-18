@@ -15,7 +15,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="mt-9 flex flex-col lg:flex-row lg:gap-10">
-        <div className="min-w-[250px] select-none">
+        <div className="hidden min-w-[250px] select-none lg:block">
           <SearchInput />
           <CategoriesFilter />
           <div

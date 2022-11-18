@@ -36,7 +36,7 @@ const CategoriesFilter = () => {
   );
 
   return (
-    <aside className="hidden lg:flex lg:flex-col ">
+    <aside>
       <h3 className="mb-2 text-xs font-medium">Categories</h3>
       {categoriesFilterButtons}
     </aside>

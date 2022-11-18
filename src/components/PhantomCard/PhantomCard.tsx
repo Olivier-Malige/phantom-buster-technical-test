@@ -131,7 +131,7 @@ const PhantomCard = ({
 
   return (
     <>
-      <div className="card max-w-3xl bg-base-100 shadow-sm ">
+      <div className="card max-w-3xl bg-base-100 shadow-sm">
         <div className="card-body">
           <div className="flex justify-between">
             <h2 className="card-title font-bold">{name}</h2>
