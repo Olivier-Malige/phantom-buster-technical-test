@@ -11,8 +11,10 @@ const Footer = () => {
         <h2 className="flex flex-col  text-lg font-semibold">
           PhantomBuster
           <div>
-            <span className="text-sm font-light">technical test </span>
-            <span className="text-sm font-bold">By Olivier Malige</span>
+            <span className="text-sm font-normal">technical test </span>
+            <span className="text-sm font-bold text-primary">
+              By Olivier Malige
+            </span>
           </div>
         </h2>
       </div>
