@@ -1,4 +1,5 @@
 import { useContext, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { PhantomsContext } from '../../contexts/phantoms/phantoms.context';
 import { PhantomCard } from '../PhantomCard';
@@ -6,21 +7,32 @@ import { SpinnerLoader } from '../SpinnerLoader';
 
 const PhantomsList = () => {
   const phantomsContext = useContext(PhantomsContext);
+  const [searchParams] = useSearchParams();
 
   if (!phantomsContext) {
     return null;
   }
 
   const filteredPhantoms = useMemo(() => {
-    if (phantomsContext.filters.category !== '') {
-      return phantomsContext.phantoms.filter((phantom) =>
-        phantom.manifest.tags.categories.includes(
-          phantomsContext.filters.category
-        )
+    const searchParamsCategory = searchParams.get('category');
+    const searchParamsSearch = searchParams.get('search');
+
+    let result = phantomsContext.phantoms;
+
+    if (searchParamsCategory !== '' && searchParamsCategory !== null) {
+      result = result.filter((phantom) =>
+        phantom.manifest.tags.categories.includes(searchParamsCategory)
       );
     }
-    return phantomsContext.phantoms;
-  }, [phantomsContext.filters.category, phantomsContext.phantoms]);
+
+    if (searchParamsSearch !== '' && searchParamsSearch !== null) {
+      result = result.filter((phantom) => {
+        return phantom.name.toLowerCase().includes(searchParamsSearch);
+      });
+    }
+
+    return result;
+  }, [searchParams, phantomsContext.phantoms]);
 
   if (phantomsContext.isLoading)
     return (

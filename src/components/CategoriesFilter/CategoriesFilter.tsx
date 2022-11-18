@@ -1,34 +1,38 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { PhantomsContext } from '../../contexts/phantoms/phantoms.context';
 import { FilterButton } from '../FilterButton/FilterButton';
 
+const KEY = 'category';
+
 const CategoriesFilter = () => {
   const phantomsContext = useContext(PhantomsContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    const searchCategoriesParams = searchParams.get('categories');
-
-    phantomsContext?.dispatchSetCategoryFilter(searchCategoriesParams || '');
-  }, [searchParams]);
-
   const handleClick = (category: string, isActive: boolean) => {
-    setSearchParams(isActive ? '' : { categories: category });
+    setSearchParams((prev) => {
+      if (isActive) {
+        prev.delete(KEY);
+      } else {
+        prev.set(KEY, category);
+      }
+      return prev;
+    });
   };
+  const categorySearchParams = searchParams.get(KEY);
 
   const categoriesFilterButtons = useMemo(
     () =>
       phantomsContext?.categories.map((category) => (
         <FilterButton
           key={category}
-          isActive={phantomsContext?.filters.category === category}
+          isActive={categorySearchParams === category}
           name={category}
           onClick={handleClick}
         />
       )),
-    [phantomsContext?.filters.category, phantomsContext?.categories]
+    [searchParams, phantomsContext?.categories]
   );
 
   return (

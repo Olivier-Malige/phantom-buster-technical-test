@@ -5,16 +5,12 @@ type IPhantomsContextStates = {
   phantoms: IPhantoms;
   isLoading: boolean;
   categories: string[];
-  filters: {
-    category: string;
-  };
 };
 
 interface IPhantomsContext extends IPhantomsContextStates {
   dispatchDelete: (id: string) => void;
   dispatchRename: (id: string, value: string) => void;
   dispatchDuplicate: (id: string) => void;
-  dispatchSetCategoryFilter: (category: string) => void;
   reset: () => void;
 }
 
@@ -47,13 +43,6 @@ type IFetchSuccessAction = {
   };
 };
 
-type ISetCategoryFilterAction = {
-  type: PhantomsActions.SET_CATEGORY_FILTER;
-  payload: {
-    category: string;
-  };
-};
-
 type ISetIsLoadingAction = {
   type: PhantomsActions.SET_IS_LOADING;
   payload: {
@@ -66,7 +55,6 @@ type IPhantomsActions =
   | IDeleteAction
   | IDuplicateAction
   | IFetchSuccessAction
-  | ISetCategoryFilterAction
   | ISetIsLoadingAction;
 
 export type {

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import { CategoriesFilter } from '../components/CategoriesFilter';
 import { PhantomsList } from '../components/PhantomsList';
+import { SearchInput } from '../components/SearchInput';
 import { PhantomsContext } from '../contexts/phantoms/phantoms.context';
 
 const DashboardPage = () => {
@@ -15,11 +16,7 @@ const DashboardPage = () => {
 
       <div className="mt-9 flex flex-col lg:flex-row lg:gap-10">
         <div className="min-w-[250px] select-none">
-          <input
-            type="text"
-            placeholder="Search"
-            className="input-bordered input input-md mb-8 w-full max-w-xs"
-          />
+          <SearchInput />
           <CategoriesFilter />
           <div
             className="btn-accent btn-xs btn mt-4"

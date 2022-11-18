@@ -15,7 +15,6 @@ enum PhantomsActions {
   RENAME = 'RENAME',
   DUPLICATE = 'DUPLICATE',
   FETCH_SUCCESS = 'FETCH_SUCCESS',
-  SET_CATEGORY_FILTER = 'SET_CATEGORY_FILTER',
   SET_IS_LOADING = 'SET_IS_LOADING',
 }
 
@@ -77,16 +76,6 @@ const reducer = (state: IPhantomsContextStates, action: IPhantomsActions) => {
       };
     }
 
-    case PhantomsActions.SET_CATEGORY_FILTER: {
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          category: payload.category,
-        },
-      };
-    }
-
     case PhantomsActions.SET_IS_LOADING: {
       return {
         ...state,
@@ -103,9 +92,6 @@ const initialStates: IPhantomsContextStates = {
   phantoms: [],
   isLoading: true,
   categories: [],
-  filters: {
-    category: '',
-  },
 };
 
 const PhantomsContext = createContext<IPhantomsContext | null>(null);
@@ -123,7 +109,8 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
         type: PhantomsActions.FETCH_SUCCESS,
         payload: { data: JSON.parse(phantomsFromLocalStorage) },
       });
-    } else if (data) {
+    }
+    if (data) {
       dispatch({ type: PhantomsActions.FETCH_SUCCESS, payload: { data } });
     }
   }, [data]);
@@ -139,7 +126,6 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
     return {
       phantoms: state.phantoms,
       categories: state.categories,
-      filters: state.filters,
       isLoading: state.isLoading,
 
       dispatchDelete: (id: string) =>
@@ -151,22 +137,16 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
       dispatchDuplicate: (id: string) =>
         dispatch({ type: PhantomsActions.DUPLICATE, payload: { id } }),
 
-      dispatchSetCategoryFilter: (category: string) =>
-        dispatch({
-          type: PhantomsActions.SET_CATEGORY_FILTER,
-          payload: { category },
-        }),
-
       reset: () => {
         dispatch({
           type: PhantomsActions.SET_IS_LOADING,
           payload: { value: true },
         });
-        localStorage.removeItem('phantoms');
+        localStorage.removeItem(LOCAL_STORAGE_KEY_PHANTOMS);
         reFetch();
       },
     };
-  }, [state, dispatch]);
+  }, [state]);
 
   return (
     <PhantomsContext.Provider value={contextValue}>
