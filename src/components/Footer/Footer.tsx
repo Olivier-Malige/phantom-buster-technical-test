@@ -12,7 +12,7 @@ const Footer = () => {
           PhantomBuster
           <div>
             <span className="text-sm font-normal">technical test </span>
-            <span className="text-sm font-bold text-primary">
+            <span className="text-sm font-bold text-secondary">
               By Olivier Malige
             </span>
           </div>

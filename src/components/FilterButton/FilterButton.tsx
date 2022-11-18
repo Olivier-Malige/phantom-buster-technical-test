@@ -7,7 +7,7 @@ type FilterButtonProps = {
 const FilterButton = ({ name, isActive, onClick }: FilterButtonProps) => (
   <button
     className={`mb-1 flex select-none gap-2 text-base ${
-      isActive ? 'font-bold' : 'font-normal'
+      isActive ? 'font-bold' : 'font-medium'
     }`}
     onClick={() => onClick(name, isActive)}
   >

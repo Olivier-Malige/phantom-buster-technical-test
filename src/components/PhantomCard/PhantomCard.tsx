@@ -134,11 +134,11 @@ const PhantomCard = ({
       <div className="card bg-base-100 shadow-sm ">
         <div className="card-body">
           <div className="flex justify-between">
-            <h2 className="card-title">{name}</h2>
+            <h2 className="card-title font-bold">{name}</h2>
             <div className="card-actions justify-end">{dropDownMenu}</div>
           </div>
 
-          <div className="flex text-sm opacity-60">
+          <div className="flex text-sm font-medium opacity-50">
             {launchType === 'repeatedly' ? (
               <>
                 <span className="truncate">{repeatedLaunchTimes}</span>
