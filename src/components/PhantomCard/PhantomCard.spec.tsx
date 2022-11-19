@@ -7,6 +7,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 
 import type { PhantomCardProps } from './PhantomCard';
 import { PhantomCard } from './PhantomCard';
@@ -21,9 +22,15 @@ const defaultProps: PhantomCardProps = {
   repeatedLaunchTimes: 'repeat-frequency-test',
 };
 
+const TestComponent = (props: PhantomCardProps) => (
+  <BrowserRouter>
+    <PhantomCard {...defaultProps} {...props} />
+  </BrowserRouter>
+);
+
 describe('PhantomCard', () => {
   test('Should render default', () => {
-    const { baseElement } = render(<PhantomCard {...defaultProps} />);
+    const { baseElement } = render(<TestComponent {...defaultProps} />);
     expect(baseElement).toBeVisible();
     expect(screen.getByText(defaultProps.name)).toBeVisible();
     expect(
@@ -37,7 +44,7 @@ describe('PhantomCard', () => {
 
   test('Should render with repeatedly launchType setup', () => {
     render(
-      <PhantomCard
+      <TestComponent
         {...defaultProps}
         launchType="repeatedly"
         nextLaunchIn={1000}
@@ -52,7 +59,7 @@ describe('PhantomCard', () => {
       id,
       value,
     }));
-    render(<PhantomCard {...defaultProps} onRename={onRenameMock} />);
+    render(<TestComponent {...defaultProps} onRename={onRenameMock} />);
 
     screen.getByTestId('dropDownMenu').click();
 
@@ -83,7 +90,7 @@ describe('PhantomCard', () => {
 
   test('Should call onDuplicate', async () => {
     const onDuplicateMock = jest.fn();
-    render(<PhantomCard {...defaultProps} onDuplicate={onDuplicateMock} />);
+    render(<TestComponent {...defaultProps} onDuplicate={onDuplicateMock} />);
 
     screen.getByTestId('dropDownMenu').click();
     screen.getByTestId('dropDownMenu-duplicate').click();
@@ -93,7 +100,7 @@ describe('PhantomCard', () => {
 
   test('Should call onDelete', async () => {
     const onDeleteMock = jest.fn();
-    render(<PhantomCard {...defaultProps} onDelete={onDeleteMock} />);
+    render(<TestComponent {...defaultProps} onDelete={onDeleteMock} />);
 
     screen.getByTestId('dropDownMenu').click();
 
@@ -112,7 +119,7 @@ describe('PhantomCard', () => {
 
   test('Should do a cancel', async () => {
     const onDeleteMock = jest.fn();
-    render(<PhantomCard {...defaultProps} onDelete={onDeleteMock} />);
+    render(<TestComponent {...defaultProps} onDelete={onDeleteMock} />);
 
     screen.getByTestId('dropDownMenu').click();
 
