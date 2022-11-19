@@ -22,7 +22,7 @@ const SearchInput = () => {
       onChange={handleChange}
       type="text"
       placeholder="Search"
-      className="input-bordered input input-md mb-8 w-full max-w-xs text-base font-semibold"
+      className="input-bordered input-accent input input-md mb-8 w-full max-w-xs text-base font-semibold"
     />
   );
 };

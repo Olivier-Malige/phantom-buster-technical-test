@@ -1,4 +1,4 @@
-const Timer = ({ className }: { className?: string }) => {
+const TimerSVG = ({ className }: { className?: string }) => {
   return (
     <svg
       className={className}
@@ -18,4 +18,4 @@ const Timer = ({ className }: { className?: string }) => {
   );
 };
 
-export { Timer };
+export { TimerSVG };

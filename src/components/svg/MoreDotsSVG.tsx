@@ -1,4 +1,4 @@
-const MoreDots = ({ className }: { className?: string }) => {
+const MoreDotsSVG = ({ className }: { className?: string }) => {
   return (
     <svg
       className={className}
@@ -18,4 +18,4 @@ const MoreDots = ({ className }: { className?: string }) => {
   );
 };
 
-export { MoreDots };
+export { MoreDotsSVG };

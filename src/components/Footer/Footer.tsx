@@ -1,11 +1,11 @@
-import { PhantomLogo } from '../../icons/PhantomLogo';
+import { PhantomLogoSVG } from '../svg/PhantomLogoSVG';
 
 const Footer = () => {
   return (
     <footer className="footer bg-base-100">
       <div className="container mx-auto my-10 flex gap-2 p-2">
         <div className="animate-pulse">
-          <PhantomLogo />
+          <PhantomLogoSVG />
         </div>
 
         <h2 className="flex flex-col  text-lg font-semibold">

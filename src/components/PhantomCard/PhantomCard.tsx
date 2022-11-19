@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { MoreDots, Timer } from '../../icons';
+import { RouterPaths } from '../../router';
 import { ConfirmModal } from '../ConfirmModal';
+import { MoreDotsSVG, TimerSVG } from '../svg';
 
 export interface PhantomCardProps {
   id: string;
@@ -60,7 +62,7 @@ const PhantomCard = ({
         tabIndex={0}
         className="btn-ghost btn-sm btn-circle btn "
       >
-        <MoreDots className="w-4" />
+        <MoreDotsSVG className="w-4" />
       </label>
       <ul
         tabIndex={0}
@@ -131,10 +133,13 @@ const PhantomCard = ({
 
   return (
     <>
-      <div className="card max-w-3xl bg-base-100 shadow-sm">
+      <div className="card max-w-3xl bg-base-100 shadow">
         <div className="card-body">
           <div className="flex justify-between">
-            <h2 className="card-title font-bold">{name}</h2>
+            <Link to={`${RouterPaths.PHANTOMS}/${id}`}>
+              <h2 className="card-title font-bold">{name}</h2>
+            </Link>
+
             <div className="card-actions justify-end">{dropDownMenu}</div>
           </div>
 
@@ -144,7 +149,7 @@ const PhantomCard = ({
                 <span className="truncate">{repeatedLaunchTimes}</span>
                 <div className="divider divider-horizontal" />
                 <span className="flex gap-2">
-                  <Timer className="w-3" /> {nextLaunchIn}
+                  <TimerSVG className="w-3" /> {nextLaunchIn}
                 </span>
               </>
             ) : (

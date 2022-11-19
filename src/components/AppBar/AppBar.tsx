@@ -1,19 +1,32 @@
-import { PhantomLogo } from '../../icons/PhantomLogo';
+import { Link, useLocation } from 'react-router-dom';
+
+import { RouterPaths } from '../../router';
+import { HamburgerSVG } from '../svg';
+import { PhantomLogoSVG } from '../svg/PhantomLogoSVG';
 import { ThemeSelector } from '../ThemeSelector';
 
 const AppBar = () => {
+  const location = useLocation();
+
   return (
     <header className="sticky top-0 z-50 bg-base-100/80 backdrop-blur">
       <nav className="container navbar mx-auto">
         <div className="navbar-start">
-          <a href="#">
-            <PhantomLogo />
-          </a>
+          <Link to={RouterPaths.ROOT}>
+            <PhantomLogoSVG />
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <a href="#" className="font-bold text-primary">
+          <Link
+            to={RouterPaths.DASHBOARD}
+            className={
+              location.pathname === RouterPaths.DASHBOARD
+                ? 'font-bold  text-primary'
+                : 'font-semibold'
+            }
+          >
             Dashboard
-          </a>
+          </Link>
         </div>
         <div className="navbar-end">
           <div className="hidden select-none lg:block">
@@ -21,19 +34,7 @@ const AppBar = () => {
           </div>
 
           <button className="btn-ghost btn-square btn flex lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block h-5 w-5 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
+            <HamburgerSVG />
           </button>
         </div>
       </nav>
