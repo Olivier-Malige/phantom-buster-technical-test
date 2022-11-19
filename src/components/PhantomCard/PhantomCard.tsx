@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import prettyPrint from 'pretty-print-ms';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { RouterPaths } from '../../router';
 import { ConfirmModal } from '../ConfirmModal';
 import { MoreDotsSVG, TimerSVG } from '../svg';
 
-export interface PhantomCardProps {
+interface PhantomCardProps {
   id: string;
   name: string;
   launchType: 'manually' | 'repeatedly';
@@ -54,6 +55,19 @@ const PhantomCard = ({
     onDuplicate(id);
     (document.activeElement as HTMLElement).blur();
   };
+
+  const [timeRemain, setTimeRemain] = useState<number>(nextLaunchIn || 0);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (timeRemain > 0) {
+        setTimeRemain(timeRemain - 1);
+      } else {
+        clearTimeout(timeout);
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [timeRemain]);
 
   const dropDownMenu = (
     <div className="dropdown-bottom dropdown-end dropdown">
@@ -148,9 +162,12 @@ const PhantomCard = ({
               <>
                 <span className="truncate">{repeatedLaunchTimes}</span>
                 <div className="divider divider-horizontal" />
-                <span className="flex gap-2">
-                  <TimerSVG className="w-3" /> {nextLaunchIn}
-                </span>
+                {nextLaunchIn && (
+                  <span className="flex gap-2">
+                    <TimerSVG className="w-3" />
+                    {prettyPrint(timeRemain * 1000)}
+                  </span>
+                )}
               </>
             ) : (
               <span className="truncate">Launch manually</span>
@@ -165,3 +182,4 @@ const PhantomCard = ({
 };
 
 export { PhantomCard };
+export type { PhantomCardProps };

@@ -51,7 +51,7 @@ describe('PhantomCard', () => {
       />
     );
     expect(screen.getByText('repeat-frequency-test')).toBeVisible();
-    expect(screen.getByText('1000')).toBeVisible();
+    expect(screen.getByText('16m 40s')).toBeVisible();
   });
 
   test('Should call onRename', async () => {
