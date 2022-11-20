@@ -146,7 +146,7 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
         reFetch();
       },
     };
-  }, [state]);
+  }, [reFetch, state.categories, state.isLoading, state.phantoms]);
 
   return (
     <PhantomsContext.Provider value={contextValue}>

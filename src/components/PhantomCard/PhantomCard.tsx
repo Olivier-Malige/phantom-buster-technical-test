@@ -147,7 +147,7 @@ const PhantomCard = ({
 
   return (
     <>
-      <div className="card max-w-3xl bg-base-100 shadow">
+      <div className="card bg-base-100 shadow">
         <div className="card-body">
           <div className="flex justify-between">
             <Link to={`${RouterPaths.PHANTOMS}/${id}`}>

@@ -1,21 +1,9 @@
-import type { DragEndEvent } from '@dnd-kit/core';
-import {
-  closestCenter,
-  DndContext,
-  DragOverlay,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { useContext, useState } from 'react';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-// import { useSearchParams } from 'react-router-dom';
 import { PhantomsContext } from '../../contexts/phantoms/phantoms.context';
 import { PhantomCard } from '../PhantomCard';
 import { SortableItem } from '../SortableItem/SortableItem';
@@ -23,101 +11,116 @@ import { SpinnerLoader } from '../SpinnerLoader';
 
 const PhantomsList = () => {
   const phantomsContext = useContext(PhantomsContext);
-  // const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  if (!phantomsContext) {
-    return null;
-  }
+  const filteredPhantoms = useMemo(() => {
+    const searchParamsCategory = searchParams.get('category');
+    const searchParamsSearch = searchParams.get('search');
 
-  if (phantomsContext.isLoading)
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <SpinnerLoader />
-      </div>
-    );
+    let result = phantomsContext?.phantoms;
+    if (result) {
+      if (searchParamsCategory !== '' && searchParamsCategory !== null) {
+        result = result.filter((phantom) =>
+          phantom.manifest.tags.categories.includes(searchParamsCategory)
+        );
+      }
 
-  // const filteredPhantoms = useMemo(() => {
-  //   const searchParamsCategory = searchParams.get('category');
-  //   const searchParamsSearch = searchParams.get('search');
+      if (searchParamsSearch !== '' && searchParamsSearch !== null) {
+        result = result.filter((phantom) => {
+          return phantom.name.toLowerCase().includes(searchParamsSearch);
+        });
+      }
+    }
 
-  //   let result = phantomsContext.phantoms;
+    return result;
+  }, [searchParams, phantomsContext?.phantoms]);
 
-  //   if (searchParamsCategory !== '' && searchParamsCategory !== null) {
-  //     result = result.filter((phantom) =>
-  //       phantom.manifest.tags.categories.includes(searchParamsCategory)
-  //     );
-  //   }
+  const [items, setItems] = useState(filteredPhantoms || []);
+  const [activePhantomId, setActivePhantomId] = useState<string | null>(null);
 
-  //   if (searchParamsSearch !== '' && searchParamsSearch !== null) {
-  //     result = result.filter((phantom) => {
-  //       return phantom.name.toLowerCase().includes(searchParamsSearch);
-  //     });
-  //   }
+  useEffect(() => {
+    if (filteredPhantoms) setItems(filteredPhantoms);
+  }, [filteredPhantoms]);
 
-  //   return result;
-  // }, [searchParams, phantomsContext.phantoms]);
+  const handleDragStart = (event: DragStartEvent) => {
+    if (items) {
+      const newActiveItem = items.find(
+        (elem) => Number(elem.id) === Number(event.active.id)
+      );
 
-  const [items, setItems] = useState(phantomsContext.phantoms);
+      if (newActiveItem) {
+        setActivePhantomId(newActiveItem.id);
+      }
+    }
+  };
+
+  const activeItem = useMemo(
+    () => (items ? items.find((item) => item.id === activePhantomId) : null),
+    [activePhantomId, items]
+  );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
-    if (over && active.id !== over.id) {
+    if (over && active.id !== over.id && items) {
       setItems((prevItems) => {
-        const oldIndex = prevItems.findIndex((item) => item.id === active.id);
-        const newIndex = prevItems.findIndex((item) => item.id === over.id);
+        if (prevItems) {
+          const oldIndex = prevItems.findIndex(
+            (item) => Number(item.id) === Number(active.id)
+          );
+          const newIndex = prevItems.findIndex(
+            (item) => Number(item.id) === Number(over.id)
+          );
 
-        return arrayMove(items, oldIndex, newIndex);
+          return arrayMove(items, oldIndex, newIndex);
+        }
+        return items;
       });
     }
   }
-  const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        delay: 50,
-        tolerance: 10,
-      },
-    }),
-    useSensor(TouchSensor)
-  );
-  console.log(items);
+
+  if (!phantomsContext || phantomsContext.isLoading)
+    return (
+      <div className="flex h-full max-w-3xl items-center justify-center">
+        <SpinnerLoader />
+      </div>
+    );
 
   return (
-    <div className="flex flex-col gap-4">
-      <DndContext
-        onDragEnd={handleDragEnd}
-        collisionDetection={closestCenter}
-        sensors={sensors}
-      >
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          {items
-            .sort((a, b) => Number(a.id) - Number(b.id))
-            .map((phantom) => (
-              <SortableItem key={phantom.id} id={Number(phantom.id)}>
-                <PhantomCard
-                  key={phantom.id}
-                  id={phantom.id}
-                  name={phantom.name}
-                  nextLaunchIn={phantom.nextLaunchIn}
-                  repeatedLaunchTimes={
-                    phantom.repeatedLaunchTimes?.simplePreset
-                  }
-                  launchType={phantom.launchType}
-                  onDelete={phantomsContext.dispatchDelete}
-                  onDuplicate={phantomsContext.dispatchDuplicate}
-                  onRename={phantomsContext.dispatchRename}
-                />
-              </SortableItem>
-            ))}
+    <div className="flex max-w-3xl flex-col gap-4">
+      <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+        <SortableContext items={items}>
+          {items.map((phantom) => (
+            <SortableItem key={phantom.id} id={phantom.id}>
+              <PhantomCard
+                key={phantom.id}
+                id={phantom.id}
+                name={phantom.name}
+                nextLaunchIn={phantom.nextLaunchIn}
+                repeatedLaunchTimes={phantom.repeatedLaunchTimes?.simplePreset}
+                launchType={phantom.launchType}
+                onDelete={phantomsContext.dispatchDelete}
+                onDuplicate={phantomsContext.dispatchDuplicate}
+                onRename={phantomsContext.dispatchRename}
+              />
+            </SortableItem>
+          ))}
           <DragOverlay>
-            <PhantomCard
-              id={'123'}
-              name={'toto'}
-              launchType={'manually'}
-              onDelete={() => null}
-              onDuplicate={() => null}
-              onRename={() => null}
-            />
+            {activeItem ? (
+              <div className="cursor-grabbing">
+                <PhantomCard
+                  id={activeItem.id}
+                  name={activeItem.name}
+                  launchType={activeItem.launchType}
+                  repeatedLaunchTimes={
+                    activeItem.repeatedLaunchTimes?.simplePreset
+                  }
+                  onDelete={() => null}
+                  onDuplicate={() => null}
+                  onRename={() => null}
+                />
+              </div>
+            ) : null}
           </DragOverlay>
         </SortableContext>
       </DndContext>
