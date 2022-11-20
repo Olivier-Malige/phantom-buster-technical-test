@@ -103,6 +103,8 @@ const PhantomsProvider = ({ children }: { children: ReactNode }) => {
   );
   const { data, reFetch } = useFetchData();
 
+  // TODO: Work but not perfectly, must be optimized with a better solution for fetching data
+  // Warning: do not change hook dependency array
   useEffect(() => {
     if (phantomsFromLocalStorage) {
       dispatch({

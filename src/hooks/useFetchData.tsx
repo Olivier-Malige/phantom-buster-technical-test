@@ -7,14 +7,13 @@ const FAKE_LATENCY = 700;
 
 const useFetchData = () => {
   const [data, setData] = useState<IPhantoms | null>(null);
-  let latencyTimeout: NodeJS.Timeout;
 
   const reFetch = () => {
     setData(null);
   };
 
   useEffect(() => {
-    latencyTimeout = setTimeout(() => {
+    const latencyTimeout = setTimeout(() => {
       setData(phantomsJson as IPhantoms);
     }, FAKE_LATENCY);
 

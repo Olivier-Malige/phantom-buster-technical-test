@@ -36,7 +36,7 @@ const PhantomsList = () => {
   }, [searchParams, phantomsContext?.phantoms]);
 
   const [items, setItems] = useState(filteredPhantoms || []);
-  const [activePhantomId, setActivePhantomId] = useState<string | null>(null);
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
 
   useEffect(() => {
     if (filteredPhantoms) setItems(filteredPhantoms);
@@ -49,17 +49,12 @@ const PhantomsList = () => {
       );
 
       if (newActiveItem) {
-        setActivePhantomId(newActiveItem.id);
+        setActiveItemId(newActiveItem.id);
       }
     }
   };
 
-  const activeItem = useMemo(
-    () => (items ? items.find((item) => item.id === activePhantomId) : null),
-    [activePhantomId, items]
-  );
-
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id && items) {
@@ -77,7 +72,12 @@ const PhantomsList = () => {
         return items;
       });
     }
-  }
+  };
+
+  const activeItem = useMemo(
+    () => (items ? items.find((item) => item.id === activeItemId) : null),
+    [activeItemId, items]
+  );
 
   if (!phantomsContext || phantomsContext.isLoading)
     return (
