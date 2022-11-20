@@ -1,46 +1,81 @@
-# Getting Started with Create React App
+# Technical test for PhantomBuster
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is my technical test for PhantomBuster which reproduces a part of the existing dashboard.
+
+https://phantom-buster-technical-test.netlify.app/
+
+Basic feature:
+* TypeScript in strict mode
+* Tailwind CSS for style
+* Only Hooks for states management
+* One unitary test
+* Load payload like an external API call
+* Categories filters
+* View of phantoms
+  
+Bonus Feature: 
+* LocalStorage persistance
+* Page for detailed phantom
+* Search
+* Countdown before next auto-launch
+* Drag and drop
+  
+Extra Feature (not asked but very funny):
+* Modal
+* Themes
+* Spine loader
+* Animations
+* Layout
+* Netlify deployment
+  
+ All bonus features are not perfect but I did my best in the time allotted :blush:  :family:
+
+I set up a trello to distribute my progress :
+https://trello.com/b/l9AcMc4z/phantom-buster
+
+## Technologies
+
+This project use :
+
+* Create React App + TypeScript
+* Prettier + Eslint setup with airbnb, typescript, tailwind and jest rules
+* Tailwind CSS + DaisyUi plugin https://tailwindcss.com/ https://daisyui.com/
+* Jest + React testing library https://testing-library.com/docs/react-testing-library/intro/
+* DndKit for drag and drop https://dndkit.com/
+* React router v6 https://reactrouter.com/en/main
+* uuid for generate unique id
+* pretty-print-ms for format of timers
+  
+
+## Setup
+
+`npm i`
+
+## Starting
+`npm start`
+
+
+## Directory Structure
+
+The library are structured like :
+
+* `src/components` all components
+* `src/contexts/phantoms` context, provider, dispatch, reducer and types for phantoms
+* `src/contexts/settings` context, provider, dispatch, reducer actions and types for settings (only theme for now)
+* `src/data` mocked data
+* `src/hooks` custom hooks
+* `src/layouts` layout for each pages
+* `src/pages` all pages of the app
+* `src/router` browser router setup with routes and paths
+* `src/style` globals style for inject tailwind
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+`npm start`
+`npm test`
+`npm run build`
+`npm run eject`
+`npm run format`
+`npm run lint`

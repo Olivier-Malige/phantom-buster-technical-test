@@ -1,3 +1,16 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
+
+User-Agent: Googlebot
+Disallow: /
+
+User-Agent: Googlebot-Mobile
+Disallow: /
+
+
+User-Agent: Googlebot-Image
+Disallow: /
+
+User-Agent:  *
+Disallow: /
