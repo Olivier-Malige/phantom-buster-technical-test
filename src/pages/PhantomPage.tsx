@@ -1,9 +1,10 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { PhantomCard } from '../components/PhantomCard';
 import { PhantomsContext } from '../contexts/phantoms/phantoms.context';
 import { MainLayout } from '../layouts';
+import { RouterPaths } from '../router';
 
 const PhantomPage = () => {
   const { phantomId } = useParams();
@@ -12,7 +13,8 @@ const PhantomPage = () => {
     (phantom) => phantom.id === phantomId
   );
 
-  if (!phantomsContext || !currentPhantom) return null;
+  if (!phantomsContext || !currentPhantom)
+    return <Navigate to={RouterPaths.DASHBOARD} />;
 
   return (
     <MainLayout>
